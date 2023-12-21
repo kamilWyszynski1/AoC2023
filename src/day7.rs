@@ -1,14 +1,8 @@
-use anyhow::{bail, Context, Error};
-use core::num;
-use itertools::Itertools;
 use std::cmp::Ordering;
-use std::ops::Deref;
 use std::{
-    any,
     collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -138,7 +132,7 @@ impl From<[Card; 5]> for Type {
                 5 => Type::HighCard(local_value.into_iter().max().unwrap()),
                 4 => Type::OnePair(
                     m.into_iter()
-                        .filter(|(k, v)| *v == 2)
+                        .filter(|(_k, v)| *v == 2)
                         .map(|(k, _)| k)
                         .next()
                         .unwrap(),
@@ -156,7 +150,7 @@ impl From<[Card; 5]> for Type {
                                 .unwrap(),
                         )
                     } else {
-                        let mut cards = m.into_iter().filter(|(k, v)| *v == 2).map(|(k, _)| k);
+                        let mut cards = m.into_iter().filter(|(_k, v)| *v == 2).map(|(k, _)| k);
                         Type::TwoPair(cards.next().unwrap(), cards.next().unwrap())
                     }
                 }
@@ -177,7 +171,7 @@ impl From<[Card; 5]> for Type {
                     } else {
                         Type::FourOfKind(
                             m.into_iter()
-                                .filter(|(k, v)| *v == 4)
+                                .filter(|(_k, v)| *v == 4)
                                 .map(|(k, _)| k)
                                 .next()
                                 .unwrap(),
@@ -246,8 +240,6 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let file = File::open(path)?;
 
     let reader = BufReader::new(file);
-
-    let mut res = 0;
 
     let mut hands: Vec<(Hand, usize)> = reader
         .lines()

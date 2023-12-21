@@ -1,13 +1,9 @@
-use anyhow::{bail, Context, Error};
-use core::num;
-use itertools::Itertools;
+use anyhow::Context;
 use std::hash::Hash;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -42,7 +38,7 @@ impl Hash for Crossroad {
 
 impl From<String> for Crossroad {
     fn from(value: String) -> Self {
-        let (id, mut rest) = value.split_once(" = ").unwrap();
+        let (id, rest) = value.split_once(" = ").unwrap();
 
         let binding = rest.replace("(", "").replace(")", "").replace(" ", "");
         let (left, right) = binding.split_once(",").unwrap();
@@ -90,7 +86,7 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
         .collect();
 
     let mut each_steps: Vec<usize> = vec![];
-    'point: for (i, point) in starting_points.iter_mut().enumerate() {
+    'point: for (_i, point) in starting_points.iter_mut().enumerate() {
         let mut steps = 0;
         dbg!(&point);
         loop {
@@ -146,7 +142,7 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let reader = BufReader::new(file);
 
-    let mut res = 0;
+    let res = 0;
 
     let mut lines = reader.lines();
     let dirs: Vec<Direction> = lines

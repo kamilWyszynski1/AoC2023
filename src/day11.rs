@@ -1,13 +1,8 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
-use std::hash::Hash;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
+    collections::HashSet,
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -104,7 +99,7 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let reader = BufReader::new(file);
 
-    let mut board = reader
+    let board = reader
         .lines()
         .map(|line| {
             line.unwrap()

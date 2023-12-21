@@ -1,13 +1,7 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
-use std::hash::Hash;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -91,16 +85,11 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     dbg!(&lines);
 
-    let mut res = 0;
-    for (pattern, code) in lines {
+    let res = 0;
+    for (pattern, _code) in lines {
         let mut generated = vec![];
         gen(&pattern, &mut generated);
 
-        // for g in generated {
-        //     if to_code(&g) == code {
-        //         res += 1
-        //     }
-        // }
         println!("generated values for {pattern}:\n {:?}", generated)
     }
 

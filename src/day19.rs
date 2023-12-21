@@ -1,18 +1,11 @@
-use anyhow::{bail, Context, Error, Ok};
-use core::num;
-use itertools::{Either, Itertools};
-use pathfinding::matrix::directions::{E, N};
-use std::cmp::{Ordering, Reverse};
-use std::collections::{BinaryHeap, VecDeque};
+use anyhow::Context;
+use itertools::Either;
 use std::fmt::Debug;
-use std::hash::Hash;
 use std::vec;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -65,7 +58,7 @@ struct Conditions((String, Vec<Box<dyn Evaluable>>));
 
 impl Evaluable for Conditions {
     fn eval(&self, container: &Container, m: &HashMap<String, Box<dyn Evaluable>>) -> Rating {
-        let Conditions((id, conditions)) = self;
+        let Conditions((_id, conditions)) = self;
 
         for c in conditions {
             let rating = c.eval(container, m);
@@ -125,7 +118,7 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     for l in BufReader::new(file).lines().map(Result::unwrap) {
         if after_empty_line {
-            let mut l: HashMap<char, usize> = l[1..l.len() - 1]
+            let l: HashMap<char, usize> = l[1..l.len() - 1]
                 .to_string()
                 .split(",")
                 .map(|v| v.split_once("=").unwrap())
@@ -186,16 +179,12 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let start = m.get("in").unwrap();
     let mut res = 0;
-    for (i, workload) in data.into_iter().enumerate() {
-        // println!("{i} EVAL");
+    for (_i, workload) in data.into_iter().enumerate() {
         let rating = start.eval(&workload, &m);
 
         if Rating::Accepted == rating {
             res += workload.values.values().sum::<usize>();
         }
-
-        // println!("data: {:?} with {:?} rating", workload, rating);
-        // println!()
     }
 
     println!("day19 a: {res}");
@@ -352,7 +341,6 @@ fn parse_condition(s: &String) {
     let mut res = 1;
     for c in s.split(" && ") {
         let mut chrs = c.chars();
-        let value = chrs.next().unwrap();
 
         chrs.next();
         let sign = if c.contains("=") {

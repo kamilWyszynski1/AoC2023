@@ -70,13 +70,6 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
         let (game, rest) = line.split_once(": ").context("could not split")?;
 
-        let game_number = {
-            let (_, number) = game
-                .split_once("Game ")
-                .context("could not split at game")?;
-            number.parse::<i32>()
-        }?;
-
         let games = rest.split("; ");
 
         let mut red = 0;

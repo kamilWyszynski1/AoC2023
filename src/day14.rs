@@ -1,15 +1,8 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
-use std::fmt::Debug;
-use std::hash::Hash;
-use std::vec;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -58,7 +51,6 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
         .collect_vec();
 
     // 10 -> north, (w,s,e,n)*2
-
     let mut cache = HashMap::new();
     for i in 0..1_000_000_000 {
         println!("LOOP {i}");

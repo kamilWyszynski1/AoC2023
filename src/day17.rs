@@ -1,22 +1,15 @@
-use anyhow::{bail, Context, Error};
-use core::num;
+use anyhow::Context;
 use itertools::Itertools;
-use pathfinding::matrix::directions::N;
-use std::cmp::{Ordering, Reverse};
-use std::collections::{BinaryHeap, VecDeque};
 use std::fmt::Debug;
 use std::hash::Hash;
 use std::vec;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
-fn applyV2(map: &mut Vec<Vec<usize>>, road: Vec<PosV2>) {
+fn apply_v2(map: &mut Vec<Vec<usize>>, road: Vec<PosV2>) {
     for PosV2 { x, y, dir: _ } in road {
         map[x as usize][y as usize] = 0
     }
@@ -260,7 +253,7 @@ impl PosV2 {
     }
 }
 
-fn heuristicV2(node: &PosV2, goal: &PosV2) -> u32 {
+fn heuristic_v2(node: &PosV2, goal: &PosV2) -> u32 {
     // Euclidean distance heuristic
     ((node.x as isize - goal.x as isize).abs() + (node.y as isize - goal.y as isize).abs()) as u32
 }
@@ -281,7 +274,7 @@ fn astarv2(board: &mut Vec<Vec<usize>>) -> anyhow::Result<u32> {
     let res = pathfinding::prelude::astar(
         &start,
         |p| p.successors(board),
-        |p| heuristicV2(p, &goal),
+        |p| heuristic_v2(p, &goal),
         |p| p.x == (board.len() - 1) as i32 && p.y == (board[0].len() - 1) as i32,
     )
     .context("path not find")?;
@@ -305,7 +298,7 @@ fn astarv2_part2(board: &mut Vec<Vec<usize>>) -> anyhow::Result<u32> {
     let res = pathfinding::prelude::astar(
         &start,
         |p| p.successors_part2(board),
-        |p| heuristicV2(p, &goal),
+        |p| heuristic_v2(p, &goal),
         |p| p.x == (board.len() - 1) as i32 && p.y == (board[0].len() - 1) as i32,
     )
     .context("path not find")?;

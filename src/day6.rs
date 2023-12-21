@@ -1,12 +1,7 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -15,7 +10,7 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let reader = BufReader::new(file);
 
-    let mut res = 0;
+    let res = 0;
 
     let mut lines = reader.lines();
     let binding = lines.next().unwrap()?.replace(" ", "");
@@ -61,8 +56,6 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let file = File::open(path)?;
 
     let reader = BufReader::new(file);
-
-    let mut res = 0;
 
     let mut lines = reader.lines();
     let binding = lines.next().unwrap()?;

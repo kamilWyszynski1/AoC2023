@@ -1,18 +1,11 @@
-use anyhow::{bail, Context, Error, Ok};
-use core::num;
-use itertools::{Either, Itertools};
-use pathfinding::matrix::directions::{E, N};
-use std::cmp::{Ordering, Reverse};
-use std::collections::{BinaryHeap, VecDeque};
+use itertools::Itertools;
+use std::collections::VecDeque;
 use std::fmt::Debug;
-use std::hash::Hash;
 use std::vec;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -99,9 +92,7 @@ impl Module {
 pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let file = File::open(path)?;
 
-    let mut modules = parse(file);
-    let broadcaster = modules.get("broadcaster").unwrap();
-
+    let modules = parse(file);
     iterate(modules);
 
     println!("day20 a");
@@ -167,8 +158,6 @@ fn iterate(mut modules: HashMap<String, Module>) {
     let mut i = 0;
     let mut counter = Counter { highs: 0, lows: 0 };
 
-    let mut part_b_iters = HashMap::new();
-
     loop {
         let mut queue: VecDeque<(FromTo, Pulse)> = VecDeque::new();
         let broadcaster = modules.get_mut("broadcaster").unwrap();
@@ -176,37 +165,15 @@ fn iterate(mut modules: HashMap<String, Module>) {
         broadcaster.pulse("button".to_string(), Pulse::Low, &mut queue, &mut counter);
 
         while let Some(((from, to), pulse)) = queue.pop_back() {
-            for check in vec!["rv", "vp", "cq", "dc"] {
-                if from == check && to == "ns" && pulse == Pulse::High {
-                    if !part_b_iters.contains_key(&from) {
-                        part_b_iters.insert(from.clone(), i + 1);
-                    }
-                }
-            }
             match modules.get_mut(&to) {
                 Some(module) => module.pulse(from, pulse, &mut queue, &mut counter),
                 None => (),
             }
         }
 
-        if part_b_iters.len() == 4 {
-            dbg!(part_b_iters); // result calculated manually using LCM
-            return;
+        if i == 999 {
+            break;
         }
-
-        // // dbg!(&modules);
-        // if starting_point == modules {
-        //     println!("found loop! {}, counter: {:?}", i, counter);
-        //     println!(
-        //         "res: {}",
-        //         (1000 / (i + 1) * counter.highs) * (1000 / (i + 1) * counter.lows)
-        //     );
-        //     return;
-        // }
-
-        // if i == 999 {
-        //     break;
-        // }
 
         i += 1;
         println!("==== {i} ====")

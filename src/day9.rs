@@ -1,13 +1,8 @@
-use anyhow::{bail, Context, Error};
-use core::num;
+use anyhow::Context;
 use itertools::Itertools;
-use std::hash::Hash;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
@@ -16,7 +11,7 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let reader = BufReader::new(file);
 
-    let mut histories: Vec<Vec<isize>> = reader
+    let histories: Vec<Vec<isize>> = reader
         .lines()
         .map(|l| {
             l.unwrap()
@@ -62,7 +57,7 @@ pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 
     let reader = BufReader::new(file);
 
-    let mut histories: Vec<Vec<isize>> = reader
+    let histories: Vec<Vec<isize>> = reader
         .lines()
         .map(|l| {
             l.unwrap()

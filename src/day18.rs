@@ -1,25 +1,16 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
-use pathfinding::matrix::directions::N;
-use std::cmp::{Ordering, Reverse};
-use std::collections::{BinaryHeap, VecDeque};
 use std::fmt::Debug;
-use std::hash::Hash;
 use std::vec;
 use std::{
-    any,
-    collections::{HashMap, HashSet},
     fs::File,
     io::{BufRead, BufReader},
-    ops::{Index, Sub},
     path::Path,
 };
 
 pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let file = File::open(path)?;
 
-    let mut data = BufReader::new(file)
+    let data = BufReader::new(file)
         .lines()
         .map(Result::unwrap)
         .map(|l| {
@@ -56,11 +47,11 @@ pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
 pub fn solveb<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let file = File::open(path)?;
 
-    let mut data = BufReader::new(file)
+    let data = BufReader::new(file)
         .lines()
         .map(Result::unwrap)
         .map(|l| {
-            let mut s = l.split(" ");
+            let s = l.split(" ");
             let last = s.last().unwrap().replace("(", "").replace(")", "");
             let hex: String = Into::<String>::into(&last[..last.len() - 1]).replace("#", "");
             let dir_char: char = last.chars().last().unwrap();

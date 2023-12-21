@@ -1,17 +1,6 @@
-use anyhow::{bail, Context, Error};
-use core::num;
 use itertools::Itertools;
-use std::fmt::Debug;
-use std::hash::Hash;
 use std::vec;
-use std::{
-    any,
-    collections::{HashMap, HashSet},
-    fs::File,
-    io::{BufRead, BufReader},
-    ops::{Index, Sub},
-    path::Path,
-};
+use std::{collections::HashMap, path::Path};
 
 pub fn solvea<P: AsRef<Path>>(path: P) -> anyhow::Result<()> {
     let s = std::fs::read_to_string(path)?;
